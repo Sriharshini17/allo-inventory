@@ -5,7 +5,17 @@ import {
   useState,
 } from "react";
 
+import {
+  useRouter,
+} from "next/navigation";
+
 export default function AdminPage() {
+
+  const router =
+    useRouter();
+
+  const [loading, setLoading] =
+    useState(true);
 
   const [products, setProducts] =
     useState<any[]>([]);
@@ -19,8 +29,9 @@ export default function AdminPage() {
 
     if (!admin) {
 
-      window.location.href =
-        "/login";
+      router.push(
+        "/login"
+      );
 
       return;
 
@@ -43,7 +54,40 @@ export default function AdminPage() {
 
       setProducts(data);
 
+      setLoading(false);
+
     };
+
+  if (loading) {
+
+    return (
+
+      <div
+        style={{
+          minHeight: "100vh",
+
+          display: "flex",
+
+          justifyContent:
+            "center",
+
+          alignItems:
+            "center",
+
+          background:
+            "#020617",
+
+          color: "white",
+
+          fontSize: "24px",
+        }}
+      >
+        Loading...
+      </div>
+
+    );
+
+  }
 
   return (
 
@@ -93,8 +137,9 @@ export default function AdminPage() {
               "admin"
             );
 
-            window.location.href =
-              "/login";
+            router.push(
+              "/login"
+            );
 
           }}
           style={{
