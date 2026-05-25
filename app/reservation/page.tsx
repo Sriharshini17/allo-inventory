@@ -3,6 +3,7 @@
 import {
   useEffect,
   useState,
+  Suspense,
 } from "react";
 
 import {
@@ -10,7 +11,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 
-export default function ReservationPage() {
+function ReservationContent() {
 
   const router =
     useRouter();
@@ -19,16 +20,24 @@ export default function ReservationPage() {
     useSearchParams();
 
   const name =
-    searchParams.get("name");
+    searchParams.get(
+      "name"
+    );
 
   const price =
-    searchParams.get("price");
+    searchParams.get(
+      "price"
+    );
 
   const image =
-    searchParams.get("image");
+    searchParams.get(
+      "image"
+    );
 
   const warehouse =
-    searchParams.get("warehouse");
+    searchParams.get(
+      "warehouse"
+    );
 
   const reservationId =
     searchParams.get(
@@ -46,53 +55,39 @@ export default function ReservationPage() {
     const timer =
       setInterval(() => {
 
-        setTimeLeft((prev) => {
+        setTimeLeft(
+          (prev) => {
 
-          if (prev <= 1) {
+            if (prev <= 1) {
 
-            clearInterval(timer);
+              clearInterval(
+                timer
+              );
 
-            fetch(
-              "/api/reservations/1/release",
-              {
-                method: "POST",
+              setStatus(
+                "Expired"
+              );
 
-                headers: {
-                  "Content-Type":
-                    "application/json",
-                },
+              return 0;
 
-                body: JSON.stringify({
+            }
 
-                  productName:
-                    name,
-
-                }),
-
-              }
-            );
-
-            setStatus(
-              "Expired"
-            );
-
-            return 0;
+            return prev - 1;
 
           }
-
-          return prev - 1;
-
-        });
+        );
 
       }, 1000);
 
     return () =>
       clearInterval(timer);
 
-  }, [name]);
+  }, []);
 
   const minutes =
-    Math.floor(timeLeft / 60);
+    Math.floor(
+      timeLeft / 60
+    );
 
   const seconds =
     timeLeft % 60;
@@ -104,193 +99,73 @@ export default function ReservationPage() {
         minHeight: "100vh",
 
         background:
-          "linear-gradient(135deg, #020617, #0f172a)",
+          "linear-gradient(to bottom right, #020617, #111827)",
 
-        padding: "40px",
+        display: "flex",
+
+        justifyContent:
+          "center",
+
+        alignItems:
+          "center",
+
+        padding: "30px",
 
         fontFamily:
-          "Arial, sans-serif",
+          "Arial",
       }}
     >
 
-      {/* TOP BAR */}
-
       <div
         style={{
-          display: "flex",
-          justifyContent:
-            "space-between",
+          width: "100%",
+          maxWidth: "850px",
 
-          alignItems: "center",
+          backgroundColor:
+            "white",
 
-          marginBottom: "35px",
+          borderRadius:
+            "32px",
+
+          overflow: "hidden",
         }}
       >
 
-        <div>
+        {image && (
 
-          <h1
+          <img
+            src={image}
+            alt="Product"
             style={{
-              color: "white",
-              fontSize: "42px",
-              marginBottom: "8px",
+              width: "100%",
+              height: "350px",
+              objectFit: "cover",
             }}
-          >
-            Reservation Portal
-          </h1>
+          />
 
-          <p
-            style={{
-              color: "#94a3b8",
-              fontSize: "18px",
-            }}
-          >
-            Enterprise Product
-            Reservation &
-            Verification
-          </p>
-
-        </div>
+        )}
 
         <div
           style={{
-            backgroundColor:
-              "rgba(255,255,255,0.08)",
-
-            border:
-              "1px solid rgba(255,255,255,0.1)",
-
-            backdropFilter:
-              "blur(10px)",
-
-            padding:
-              "18px 28px",
-
-            borderRadius:
-              "20px",
-          }}
-        >
-
-          <p
-            style={{
-              color: "#94a3b8",
-              marginBottom: "5px",
-            }}
-          >
-            Reservation ID
-          </p>
-
-          <h2
-            style={{
-              color: "white",
-              margin: 0,
-            }}
-          >
-            #{reservationId}
-          </h2>
-
-        </div>
-
-      </div>
-
-      {/* MAIN CARD */}
-
-      <div
-        style={{
-          maxWidth: "1200px",
-
-          margin: "0 auto",
-
-          display: "grid",
-
-          gridTemplateColumns:
-            "1fr 1fr",
-
-          gap: "35px",
-        }}
-      >
-
-        {/* LEFT SIDE */}
-
-        <div
-          style={{
-            background:
-              "rgba(255,255,255,0.08)",
-
-            border:
-              "1px solid rgba(255,255,255,0.1)",
-
-            backdropFilter:
-              "blur(12px)",
-
-            borderRadius:
-              "30px",
-
-            overflow: "hidden",
-
-            boxShadow:
-              "0px 15px 40px rgba(0,0,0,0.3)",
-          }}
-        >
-
-          {image && (
-
-            <img
-              src={image}
-              alt="Product"
-              style={{
-                width: "100%",
-                height: "420px",
-                objectFit: "cover",
-              }}
-            />
-
-          )}
-
-        </div>
-
-        {/* RIGHT SIDE */}
-
-        <div
-          style={{
-            background:
-              "rgba(255,255,255,0.08)",
-
-            border:
-              "1px solid rgba(255,255,255,0.1)",
-
-            backdropFilter:
-              "blur(12px)",
-
-            borderRadius:
-              "30px",
-
             padding: "40px",
-
-            boxShadow:
-              "0px 15px 40px rgba(0,0,0,0.3)",
           }}
         >
-
-          {/* STATUS */}
 
           <div
             style={{
               display: "flex",
+
               justifyContent:
                 "space-between",
 
-              alignItems: "center",
-
-              marginBottom: "30px",
+              alignItems:
+                "center",
             }}
           >
 
             <h1
               style={{
-                color: "white",
-                fontSize: "40px",
-                margin: 0,
+                fontSize: "38px",
               }}
             >
               {name}
@@ -298,28 +173,42 @@ export default function ReservationPage() {
 
             <div
               style={{
+                backgroundColor:
+
+                  status ===
+                  "Confirmed"
+
+                    ? "#dcfce7"
+
+                    : status ===
+                      "Cancelled"
+
+                    ? "#fee2e2"
+
+                    : "#fef3c7",
+
+                color:
+
+                  status ===
+                  "Confirmed"
+
+                    ? "#166534"
+
+                    : status ===
+                      "Cancelled"
+
+                    ? "#991b1b"
+
+                    : "#92400e",
+
                 padding:
-                  "10px 18px",
+                  "12px 24px",
 
                 borderRadius:
-                  "30px",
+                  "999px",
 
                 fontWeight:
                   "bold",
-
-                backgroundColor:
-                  status ===
-                  "Confirmed"
-                    ? "#22c55e"
-                    : status ===
-                      "Cancelled"
-                    ? "#ef4444"
-                    : status ===
-                      "Expired"
-                    ? "#f59e0b"
-                    : "#3b82f6",
-
-                color: "white",
               }}
             >
               {status}
@@ -327,150 +216,108 @@ export default function ReservationPage() {
 
           </div>
 
-          {/* DESCRIPTION */}
-
           <p
             style={{
-              color: "#cbd5e1",
+              color: "#64748b",
 
-              lineHeight: "1.8",
+              marginTop: "20px",
 
-              marginBottom: "35px",
+              fontSize: "20px",
 
-              fontSize: "17px",
+              lineHeight: "1.7",
             }}
           >
-            Your reservation is
-            securely processed
-            through our enterprise
-            inventory management
-            system with live stock
-            synchronization and
-            intelligent warehouse
-            handling.
+            Premium product reservation
+            with real-time inventory
+            management.
           </p>
 
-          {/* PRICE */}
+          <h2
+            style={{
+              marginTop: "25px",
+
+              fontSize: "34px",
+            }}
+          >
+            ₹ {price}
+          </h2>
 
           <div
             style={{
-              marginBottom: "35px",
+              marginTop: "35px",
+
+              backgroundColor:
+                "#f8fafc",
+
+              padding: "30px",
+
+              borderRadius:
+                "24px",
             }}
           >
 
-            <p
+            <h2>
+
+              Warehouse:
+              {" "}
+              {warehouse}
+
+            </h2>
+
+            <h2
               style={{
-                color: "#94a3b8",
-                marginBottom: "10px",
+                marginTop: "20px",
               }}
             >
-              Product Price
-            </p>
+
+              Reservation ID:
+              {" "}
+              #
+              {reservationId}
+
+            </h2>
+
+            <h2
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              Expires In:
+            </h2>
 
             <h1
               style={{
-                color: "white",
-                fontSize: "46px",
-                margin: 0,
+                marginTop: "15px",
+
+                color:
+                  "#2563eb",
+
+                fontSize: "42px",
               }}
             >
-              ₹ {price}
+
+              {minutes}:
+              {seconds
+                .toString()
+                .padStart(
+                  2,
+                  "0"
+                )}
+
             </h1>
 
           </div>
 
-          {/* INFO CARDS */}
-
-          <div
-            style={{
-              display: "grid",
-
-              gridTemplateColumns:
-                "1fr 1fr",
-
-              gap: "20px",
-
-              marginBottom: "35px",
-            }}
-          >
-
-            <div
-              style={{
-                backgroundColor:
-                  "rgba(255,255,255,0.05)",
-
-                padding: "22px",
-
-                borderRadius:
-                  "20px",
-              }}
-            >
-
-              <p
-                style={{
-                  color: "#94a3b8",
-                  marginBottom: "8px",
-                }}
-              >
-                Warehouse
-              </p>
-
-              <h2
-                style={{
-                  color: "white",
-                  margin: 0,
-                }}
-              >
-                {warehouse}
-              </h2>
-
-            </div>
-
-            <div
-              style={{
-                backgroundColor:
-                  "rgba(255,255,255,0.05)",
-
-                padding: "22px",
-
-                borderRadius:
-                  "20px",
-              }}
-            >
-
-              <p
-                style={{
-                  color: "#94a3b8",
-                  marginBottom: "8px",
-                }}
-              >
-                Expires In
-              </p>
-
-              <h2
-                style={{
-                  color: "#22c55e",
-                  margin: 0,
-                }}
-              >
-                {minutes}:
-                {seconds
-                  .toString()
-                  .padStart(2, "0")}
-              </h2>
-
-            </div>
-
-          </div>
-
-          {/* BUTTONS */}
-
-          {status === "Pending" && (
+          {status ===
+            "Pending" && (
 
             <div
               style={{
                 display: "flex",
+
                 gap: "20px",
+
+                marginTop: "35px",
               }}
             >
 
@@ -481,22 +328,25 @@ export default function ReservationPage() {
 
                   const response =
                     await fetch(
-                      "/api/reservations/1/confirm",
+
+                      `/api/reservations/${reservationId}/confirm`,
+
                       {
                         method:
                           "POST",
                       }
+
                     );
 
                   const data =
                     await response.json();
 
-                  setStatus(
-                    "Confirmed"
-                  );
-
                   alert(
                     data.message
+                  );
+
+                  setStatus(
+                    "Confirmed"
                   );
 
                 }}
@@ -504,23 +354,24 @@ export default function ReservationPage() {
                   flex: 1,
 
                   background:
-                    "linear-gradient(to right, #22c55e, #16a34a)",
+                    "linear-gradient(to right,#2563eb,#7c3aed)",
 
                   color: "white",
 
-                  padding: "18px",
-
                   border: "none",
+
+                  padding: "18px",
 
                   borderRadius:
                     "18px",
 
-                  fontSize: "17px",
+                  fontSize: "18px",
 
                   fontWeight:
                     "bold",
 
-                  cursor: "pointer",
+                  cursor:
+                    "pointer",
                 }}
               >
                 Confirm Purchase
@@ -533,59 +384,50 @@ export default function ReservationPage() {
 
                   const response =
                     await fetch(
-                      "/api/reservations/1/release",
+
+                      `/api/reservations/${reservationId}/release`,
+
                       {
                         method:
                           "POST",
-
-                        headers: {
-                          "Content-Type":
-                            "application/json",
-                        },
-
-                        body: JSON.stringify({
-
-                          productName:
-                            name,
-
-                        }),
-
                       }
+
                     );
 
                   const data =
                     await response.json();
 
-                  setStatus(
-                    "Cancelled"
-                  );
-
                   alert(
                     data.message
+                  );
+
+                  setStatus(
+                    "Cancelled"
                   );
 
                 }}
                 style={{
                   flex: 1,
 
-                  background:
-                    "linear-gradient(to right, #ef4444, #dc2626)",
+                  backgroundColor:
+                    "#ef4444",
 
                   color: "white",
 
-                  padding: "18px",
-
                   border: "none",
+
+                  padding: "18px",
 
                   borderRadius:
                     "18px",
 
-                  fontSize: "17px",
+                  fontSize: "18px",
 
                   fontWeight:
                     "bold",
 
-                  cursor: "pointer",
+                  cursor:
+                    "pointer",
                 }}
               >
                 Cancel Reservation
@@ -595,8 +437,6 @@ export default function ReservationPage() {
 
           )}
 
-          {/* BACK BUTTON */}
-
           <button
             onClick={() =>
               router.push("/")
@@ -604,27 +444,25 @@ export default function ReservationPage() {
             style={{
               width: "100%",
 
-              marginTop: "25px",
+              marginTop: "35px",
 
               backgroundColor:
-                "rgba(255,255,255,0.08)",
+                "#e2e8f0",
 
-              color: "white",
+              border: "none",
 
               padding: "18px",
-
-              border:
-                "1px solid rgba(255,255,255,0.1)",
 
               borderRadius:
                 "18px",
 
-              fontSize: "16px",
+              fontSize: "18px",
 
               fontWeight:
                 "bold",
 
-              cursor: "pointer",
+              cursor:
+                "pointer",
             }}
           >
             Back To Products
@@ -635,6 +473,26 @@ export default function ReservationPage() {
       </div>
 
     </div>
+
+  );
+
+}
+
+export default function ReservationPage() {
+
+  return (
+
+    <Suspense
+      fallback={
+        <div>
+          Loading...
+        </div>
+      }
+    >
+
+      <ReservationContent />
+
+    </Suspense>
 
   );
 
