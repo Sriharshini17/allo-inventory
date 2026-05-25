@@ -22,11 +22,15 @@ export default function LoginPage() {
   const login = () => {
 
     if (
+
       email ===
-        "admin@allo.com" &&
+        "admin@allo.com"
+
+      &&
 
       password ===
         "admin123"
+
     ) {
 
       localStorage.setItem(
@@ -63,7 +67,7 @@ export default function LoginPage() {
           "center",
 
         background:
-          "linear-gradient(to bottom right, #020617, #111827)",
+          "linear-gradient(to bottom right,#020617,#111827)",
 
         fontFamily:
           "Arial",
@@ -81,9 +85,6 @@ export default function LoginPage() {
 
           borderRadius:
             "28px",
-
-          backdropFilter:
-            "blur(10px)",
         }}
       >
 
@@ -91,11 +92,11 @@ export default function LoginPage() {
           style={{
             color: "white",
 
-            marginBottom:
-              "30px",
-
             textAlign:
               "center",
+
+            marginBottom:
+              "30px",
           }}
         >
           Admin Login
@@ -130,7 +131,7 @@ export default function LoginPage() {
             width: "100%",
 
             background:
-              "linear-gradient(to right, #2563eb, #7c3aed)",
+              "linear-gradient(to right,#2563eb,#7c3aed)",
 
             color: "white",
 
@@ -144,9 +145,8 @@ export default function LoginPage() {
             fontWeight:
               "bold",
 
-            fontSize: "16px",
-
-            cursor: "pointer",
+            cursor:
+              "pointer",
           }}
         >
           Login
@@ -166,9 +166,11 @@ const inputStyle = {
 
   padding: "16px",
 
-  marginBottom: "20px",
+  marginBottom:
+    "20px",
 
-  borderRadius: "14px",
+  borderRadius:
+    "14px",
 
   border: "none",
 
